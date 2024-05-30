@@ -12,7 +12,20 @@ router.post('/signup', async (req: Request, res: Response, next: NextFunction) =
       result
     });
   } catch (e) {
-    throw e
+    res.json({ e })
+  }
+});
+
+
+router.post('/signin', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const params = { email: req.body.email, password: req.body.password }
+    const result = await controller.signin(params);
+    res.json({
+      result
+    });
+  } catch (e) {
+    res.json({ e })
   }
 });
 

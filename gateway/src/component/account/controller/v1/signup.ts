@@ -7,7 +7,6 @@ const signup = async (params: any, models: any) => {
 
   try {
     const { email, nickname, password } = params;
-    console.log(`params;`, params)
     const encPassword = bcryptClass.hash(password)
 
     await models.create({ email, nickname, password: encPassword }, session);

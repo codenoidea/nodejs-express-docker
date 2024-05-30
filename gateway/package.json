@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "ts-node-dev --poll ./app.ts",
     "build": "rimraf ./dist && tsc",
-    "start": "npm run build && node dist/app.js"
+    "start": "npm run build && nodemon dist/app.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
