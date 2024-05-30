@@ -1,5 +1,7 @@
+import jwt from 'jsonwebtoken'
 import bcryptClass from '../../../../util/bcrypt'
 import getInfo from './getInfo';
+import config from '../../../../config/'
 
 async function checkCompare(params: any) {
   try {
@@ -28,7 +30,12 @@ const signin = async (params: any, models: any) => {
 
     await checkCompare({ password, info })
 
-    return 1;
+
+    const token = jwt.sign({ userId: info._id, email: info.email }, config.ACCESS_TOKEN_SECRET);
+
+    return {
+      token
+    };
   } catch (error) {
     throw error;
   }
