@@ -11,20 +11,30 @@ services:
       - 27017:27017
     volumes:
       - db:/data/db
+
   gateway:
     depends_on:
       - mongodb
     build: ./gateway
     restart: unless-stopped
-    env_file: ./gateway/.env
+    # env_file:
+    #   - ./gateway/.env
     ports:
-      - $PORT:$PORT
+      - 3000:3000
     environment:
-      - DB_HOST=mongodb
-      - DB_USER=mongo
-      - DB_PASSWORD=mongo1234
-      - DB_NAME=express
-      - DB_PORT=27017
+      - MONGODB=mongodb://localhost:27017/express
+    #컨테이너에 접근옵션
+    stdin_open: true
+    tty: true
+
+  board:
+    build: ./board
+    restart: unless-stopped
+    # env_file:
+    #   - ./board/.env
+    ports:
+      - 3001:3001
+    #컨테이너에 접근옵션
     stdin_open: true
     tty: true
 
