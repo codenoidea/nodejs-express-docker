@@ -18,6 +18,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 routerV1(app)
 
+app.get('/', (req: Request, res: Response) => {
+  res.send('Typescript + Node.js + Express Server');
+});
+
 // catch 404 and forward to error handler
 app.use(function (req: Request, res: Response, next: NextFunction) {
   next(createError(404));
@@ -40,8 +44,8 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 
   // Bind connection to error event (to get notification of connection errors)
-  db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-  db.once('open', () => {
-    console.log('mongo db connection OK.');
-  });
+  // db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+  // db.once('open', () => {
+  //   console.log('mongo db connection OK.');
+  // });
 })

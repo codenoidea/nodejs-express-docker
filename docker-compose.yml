@@ -22,7 +22,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      - MONGODB=mongodb://localhost:27017/express
+      - MONGODB=mongodb://mongo:mongo1234@mongodb:27017
     #컨테이너에 접근옵션
     stdin_open: true
     tty: true
