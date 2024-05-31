@@ -1,3 +1,5 @@
+nodejs express와 grpc로 시작하는 도커 및 도커컴포즈 feat. mongodb & postgreSql
+
 gateway
   - gateway
   - sign up
@@ -6,15 +8,18 @@ gateway
 board
   - board
 
-docker-compose up -d --build
 
-docker-compose down
+docker-compose
+  - postgresql 서비스가 board 서비스보다 늦게떠서 처음에 오류 발생함, board 컨테이너를 새로고침하면 정상적으로 접속
+  - 실행: docker-compose up -d --build
+  - 멈춤 및 컨테이너삭제: docker-compose down
+  - 로그: docker-compose logs -f
 
-docker-compose logs -f
 
-docker run -d -p 27017:27017 mongo:latest
+docker
+  - 몽고 컨테이너: docker run -d -p 27017:27017 mongo:latest
+  - postgre 컨테이너: docker run -d -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres1234 -e POSTGRES_DB=express postgres:alpine
 
-docker run -d -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres1234 -e POSTGRES_DB=express postgres:alpine
 
 grpc
   - window 인경우
