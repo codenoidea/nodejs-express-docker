@@ -4,9 +4,11 @@ import { ServiceError, credentials } from '@grpc/grpc-js';
 const router = express.Router();
 import { mandatory, optional } from '../../../../middleware/authoration';
 import { BoardCreate, BoardResult, BoardServiceClient } from '../../../../protos/board';
+import config from '../../../../config'
 
+console.log(`config.BOARD_HOST;`, config.BOARD_HOST)
 const client = new BoardServiceClient(
-  'localhost:3001',
+  config.BOARD_HOST,
   credentials.createInsecure()
 );
 
@@ -32,6 +34,9 @@ router.post('/', mandatory, async (req: Request, res: Response, next: NextFuncti
     client.create(
       params,
       (err: ServiceError | null, response: BoardResult) => {
+        if (err) {
+          console.log(err)
+        }
         console.log(JSON.stringify(response));
 
         res.json(response);
