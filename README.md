@@ -10,7 +10,6 @@ board
 
 
 docker-compose
-  - postgresql 서비스가 board 서비스보다 늦게떠서 처음에 오류 발생함, board 컨테이너를 새로고침하면 정상적으로 접속
   - 실행: docker-compose up -d --build
   - 멈춤 및 컨테이너삭제: docker-compose down
   - 로그: docker-compose logs -f
@@ -23,10 +22,10 @@ docker
 
 grpc
   - window 인경우
-  https://github.com/protocolbuffers/protobuf/releases 에서 protoc-27.0-win64.zip 다운로드
-  환경 변수 > path에 protoc-27.0-win64/bin 추가
+  https://github.com/protocolbuffers/protobuf/releases 에서 protoc-27.0-win64.zip 다운로드 <br/>
+  환경 변수 > path에 protoc-27.0-win64/bin 추가 <br/>
   cmd 창에서 protoc --version 확인
 
 
-  - 타입스크립트로 변환하기 위해 cmd에서 실행
+  - 타입스크립트로 변환하기 위해 cmd에서 실행 <br/>
   protoc --plugin=protoc-gen-ts_proto=.\node_modules\.bin\protoc-gen-ts_proto.cmd --ts_proto_out=. ./src/protos/board.proto --ts_proto_opt=outputServices=grpc-js,env=node,esModuleInterop=true
