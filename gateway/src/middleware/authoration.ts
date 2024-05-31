@@ -13,9 +13,11 @@ const mandatory = (req: Request, res: Response, next: NextFunction) => {
       // tsconfig.json에 typeRoots 옵션 추가
       req.user = { ...decoded };
       next();
+    } else {
+      res.status(400).send("로그인한 유저만 사용할 수 있는 서비스입니다.");
+      return;
     }
-    res.status(400).send("로그인한 유저만 사용할 수 있는 서비스입니다.");
-    return;
+
   } catch (error) {
     res.status(400).send("정상적인 토큰이 아닙니다. 다시 한 번 확인해 주세요.");
     return;

@@ -1,18 +1,17 @@
 board
 
+npm 
+  - npm i @grpc/grpc-js@1.9.0 #최신버전 1.10 에선 start() 함수가 Deprecated
+  - npm i @types/cookie-parser @types/express @types/node ts-node-dev typescript ts-proto @types/morgan --save-dev
+
+
 일반실행
-- npm ci
-- npm run debug
+  - npm ci
+  - npm run debug
 
 
 docker실행
-- docker build . -t express-board
-- docker run -d -p 3000:3000 express-board
+  - docker build . -t grpc-board
+  - docker run -d -p 3001:3001 grpc-board
 
 
-api
-- 목록 list
-- 등록 c
-- 상세 r
-- 수정 u
-- 삭제 d

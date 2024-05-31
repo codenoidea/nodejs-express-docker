@@ -1,8 +1,14 @@
 
 import express, { Request, Response, NextFunction } from 'express';
+import { ServiceError, credentials } from '@grpc/grpc-js';
 const router = express.Router();
 import { mandatory, optional } from '../../../../middleware/authoration';
+import { BoardCreate, BoardResult, BoardServiceClient } from '../../../../protos/board';
 
+const client = new BoardServiceClient(
+  'localhost:3001',
+  credentials.createInsecure()
+);
 
 router.get('/', optional, async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -20,12 +26,17 @@ router.get('/', optional, async (req: Request, res: Response, next: NextFunction
 
 router.post('/', mandatory, async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const params = { title: req.body.title, content: req.body.content, userId: req.user?.userId }
+    const params: BoardCreate = { title: req.body.title, content: req.body.content, userId: req.user?.userId }
     console.log(`params;`, params)
-    const result = ""
-    res.json({
-      result
-    });
+
+    client.create(
+      params,
+      (err: ServiceError | null, response: BoardResult) => {
+        console.log(JSON.stringify(response));
+
+        res.json(response);
+      }
+    );
   } catch (e) {
     res.json({ e })
   }

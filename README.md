@@ -13,5 +13,5 @@ grpc
   cmd 창에서 protoc --version 확인
 
 
-  - 타입스크립트로 변환하기 위해 실행
+  - 타입스크립트로 변환하기 위해 cmd에서 실행
   protoc --plugin=protoc-gen-ts_proto=.\node_modules\.bin\protoc-gen-ts_proto.cmd --ts_proto_out=. ./src/protos/board.proto --ts_proto_opt=outputServices=grpc-js,env=node,esModuleInterop=true
