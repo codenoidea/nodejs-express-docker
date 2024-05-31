@@ -6,7 +6,6 @@ import { mandatory, optional } from '../../../../middleware/authoration';
 import { BoardCreate, BoardResult, BoardServiceClient } from '../../../../protos/board';
 import config from '../../../../config'
 
-console.log(`config.BOARD_HOST;`, config.BOARD_HOST)
 const client = new BoardServiceClient(
   config.BOARD_HOST,
   credentials.createInsecure()

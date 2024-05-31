@@ -1,3 +1,11 @@
+gateway
+  - gateway
+  - sign up
+  - sign in
+
+board
+  - board
+
 docker-compose up -d --build
 
 docker-compose down
@@ -5,6 +13,8 @@ docker-compose down
 docker-compose logs -f
 
 docker run -d -p 27017:27017 mongo:latest
+
+docker run -d -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres1234 -e POSTGRES_DB=express postgres:alpine
 
 grpc
   - window 인경우

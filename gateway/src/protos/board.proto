@@ -3,7 +3,9 @@ package boardPackage;
 
 // 서비스
 service BoardService {
+    rpc list(BoardSearch) returns (BoardList);
     rpc create(BoardCreate) returns (BoardResult);
+
 }
 
 // 결과 코드
@@ -17,6 +19,18 @@ message BoardResult {
     ResultCode resultCode = 1;
 }
 
+message BoardSearch {
+    optional int limit =1;
+    optional int page = 2;
+}
+
+message BoardList {
+    string title = 1;
+    string content = 2;
+    int thumbs_up = 3;
+    int thumbs_down = 4;
+    string userId = 5;
+}
 
 // 생성
 message BoardCreate {

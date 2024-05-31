@@ -7,7 +7,7 @@ npm
 
 일반실행
   - npm ci
-  - npm run debug
+  - npm start
 
 
 docker실행
