@@ -32,7 +32,6 @@ services:
       - 5432:5432
     volumes:
       - db:/data/postgres
-      - "./src/db/init/:/docker-entrypoint-initdb.d/"
     networks:
       - node-network
 
@@ -67,6 +66,8 @@ services:
       - DB_HOST=postgres
     networks:
       - node-network
+    volumes:
+      - "./board/src/db/init/:/docker-entrypoint-initdb.d/"
     #터미널에서 컨테이너 접근옵션
     stdin_open: true
     tty: true

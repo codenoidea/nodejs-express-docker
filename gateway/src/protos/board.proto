@@ -1,40 +1,89 @@
 syntax = "proto3";
-package boardPackage;
+package board;
+import "google/protobuf/timestamp.proto";
 
 // 서비스
 service BoardService {
-    rpc list(BoardSearch) returns (BoardList);
-    rpc create(BoardCreate) returns (BoardResult);
+  rpc list(ListBoardRequest) returns (ListBoardResponse);
+  rpc create(CreateBoardRequest) returns (CreateBoardResponse);
+  rpc info(GetBoardRequest) returns (GetBoardResponse);
+  rpc update(UpdateBoardRequest) returns (UpdateBoardResponse);
+  rpc delete(DeleteBoardRequest) returns (DeleteBoardResponse);
+}
 
+message Board {
+  int32 id = 1;
+  string title = 2;
+  string content = 3;
+  int32 thumbs_up = 4;
+  int32 thumbs_down = 5;
+  string user_id = 6;
+  google.protobuf.Timestamp created_at = 7;  
+  google.protobuf.Timestamp updated_at = 8;  
+  string owner_yn = 9;
 }
 
 // 결과 코드
 enum ResultCode {
-    SUCCESS = 0;
-    FAIL = 1;
+  SUCCESS = 0;
+  FAIL = 1;
 };
 
 // 결과
 message BoardResult {
-    ResultCode resultCode = 1;
+  ResultCode resultCode = 1;
 }
 
-message BoardSearch {
-    optional int limit =1;
-    optional int page = 2;
+message BoardId {
+  int32 id = 1;
+  string userId = 2;
 }
 
-message BoardList {
-    string title = 1;
-    string content = 2;
-    int thumbs_up = 3;
-    int thumbs_down = 4;
-    string userId = 5;
+message CreateBoardRequest {
+  string title = 1;
+  string content = 2;
+  string userId = 3;
 }
 
-// 생성
-message BoardCreate {
-    string title = 1;
-    string content = 2;
-    optional string userId = 3;
+message CreateBoardResponse {
+  Board board = 1;
+}
+
+message ListBoardRequest  {
+  optional int32 limit =1;
+  optional int32 page = 2;
+  optional string userId = 3;
+}
+
+message ListBoardResponse  {
+  repeated Board board = 1;
+}
+
+message GetBoardRequest {
+  int32 id = 1;
+  optional string user_id = 2;
+}
+
+message GetBoardResponse {
+  Board board = 1;
+}
+
+message UpdateBoardRequest {
+  int32 id = 1;
+  string title = 2;
+  string content = 3;
+  string userId = 4;
+}
+
+message UpdateBoardResponse {
+  BoardResult boardResult = 1;
+}
+
+message DeleteBoardRequest {
+  int32 id = 1;
+  string userId = 2;
+}
+
+message DeleteBoardResponse {
+  BoardResult boardResult = 1;
 }

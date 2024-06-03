@@ -1,0 +1,28 @@
+import sequelize from "../../db/sequelize";
+import { board } from "../../models/board";
+
+const deleteFnc = async (params: any) => {
+  const t = await sequelize.transaction();
+
+  try {
+    const { id, userId } = params;
+
+    await board.destroy({
+      where: {
+        id,
+        user_id: userId,
+      },
+      transaction: t,
+    });
+
+    await t.commit();
+
+    return 0;
+  } catch (err) {
+    await t.rollback();
+
+    throw err;
+  }
+};
+
+export default deleteFnc;

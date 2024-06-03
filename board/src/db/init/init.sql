@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS board (
     content varchar(100),
     thumbs_up int DEFAULT 0,
     thumbs_down int DEFAULT 0,
-    userid varchar(100),
-    created_at date DEFAULT CURRENT_TIMESTAMP,
-    updated_at date
+    user_id varchar(100),
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP
 );

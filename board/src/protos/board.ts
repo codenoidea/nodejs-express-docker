@@ -18,8 +18,9 @@ import {
   type UntypedServiceImplementation,
 } from "@grpc/grpc-js";
 import _m0 from "protobufjs/minimal";
+import { Timestamp } from "../../google/protobuf/timestamp";
 
-export const protobufPackage = "boardPackage";
+export const protobufPackage = "board";
 
 /** 결과 코드 */
 export enum ResultCode {
@@ -55,17 +56,265 @@ export function resultCodeToJSON(object: ResultCode): string {
   }
 }
 
+export interface Board {
+  id: number;
+  title: string;
+  content: string;
+  thumbsUp: number;
+  thumbsDown: number;
+  userId: string;
+  createdAt: Date | undefined;
+  updatedAt: Date | undefined;
+  ownerYn: string;
+}
+
 /** 결과 */
 export interface BoardResult {
   resultCode: ResultCode;
 }
 
-/** 생성 */
-export interface BoardCreate {
+export interface BoardId {
+  id: number;
+  userId: string;
+}
+
+export interface CreateBoardRequest {
   title: string;
   content: string;
+  userId: string;
+}
+
+export interface CreateBoardResponse {
+  board: Board | undefined;
+}
+
+export interface ListBoardRequest {
+  limit?: number | undefined;
+  page?: number | undefined;
   userId?: string | undefined;
 }
+
+export interface ListBoardResponse {
+  board: Board[];
+}
+
+export interface GetBoardRequest {
+  id: number;
+  userId?: string | undefined;
+}
+
+export interface GetBoardResponse {
+  board: Board | undefined;
+}
+
+export interface UpdateBoardRequest {
+  id: number;
+  title: string;
+  content: string;
+  userId: string;
+}
+
+export interface UpdateBoardResponse {
+  boardResult: BoardResult | undefined;
+}
+
+export interface DeleteBoardRequest {
+  id: number;
+  userId: string;
+}
+
+export interface DeleteBoardResponse {
+  boardResult: BoardResult | undefined;
+}
+
+function createBaseBoard(): Board {
+  return {
+    id: 0,
+    title: "",
+    content: "",
+    thumbsUp: 0,
+    thumbsDown: 0,
+    userId: "",
+    createdAt: undefined,
+    updatedAt: undefined,
+    ownerYn: "",
+  };
+}
+
+export const Board = {
+  encode(message: Board, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).int32(message.id);
+    }
+    if (message.title !== "") {
+      writer.uint32(18).string(message.title);
+    }
+    if (message.content !== "") {
+      writer.uint32(26).string(message.content);
+    }
+    if (message.thumbsUp !== 0) {
+      writer.uint32(32).int32(message.thumbsUp);
+    }
+    if (message.thumbsDown !== 0) {
+      writer.uint32(40).int32(message.thumbsDown);
+    }
+    if (message.userId !== "") {
+      writer.uint32(50).string(message.userId);
+    }
+    if (message.createdAt !== undefined) {
+      Timestamp.encode(toTimestamp(message.createdAt), writer.uint32(58).fork()).ldelim();
+    }
+    if (message.updatedAt !== undefined) {
+      Timestamp.encode(toTimestamp(message.updatedAt), writer.uint32(66).fork()).ldelim();
+    }
+    if (message.ownerYn !== "") {
+      writer.uint32(74).string(message.ownerYn);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Board {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseBoard();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.id = reader.int32();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.title = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.content = reader.string();
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.thumbsUp = reader.int32();
+          continue;
+        case 5:
+          if (tag !== 40) {
+            break;
+          }
+
+          message.thumbsDown = reader.int32();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.userId = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.createdAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.updatedAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          continue;
+        case 9:
+          if (tag !== 74) {
+            break;
+          }
+
+          message.ownerYn = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Board {
+    return {
+      id: isSet(object.id) ? globalThis.Number(object.id) : 0,
+      title: isSet(object.title) ? globalThis.String(object.title) : "",
+      content: isSet(object.content) ? globalThis.String(object.content) : "",
+      thumbsUp: isSet(object.thumbsUp) ? globalThis.Number(object.thumbsUp) : 0,
+      thumbsDown: isSet(object.thumbsDown) ? globalThis.Number(object.thumbsDown) : 0,
+      userId: isSet(object.userId) ? globalThis.String(object.userId) : "",
+      createdAt: isSet(object.createdAt) ? fromJsonTimestamp(object.createdAt) : undefined,
+      updatedAt: isSet(object.updatedAt) ? fromJsonTimestamp(object.updatedAt) : undefined,
+      ownerYn: isSet(object.ownerYn) ? globalThis.String(object.ownerYn) : "",
+    };
+  },
+
+  toJSON(message: Board): unknown {
+    const obj: any = {};
+    if (message.id !== 0) {
+      obj.id = Math.round(message.id);
+    }
+    if (message.title !== "") {
+      obj.title = message.title;
+    }
+    if (message.content !== "") {
+      obj.content = message.content;
+    }
+    if (message.thumbsUp !== 0) {
+      obj.thumbsUp = Math.round(message.thumbsUp);
+    }
+    if (message.thumbsDown !== 0) {
+      obj.thumbsDown = Math.round(message.thumbsDown);
+    }
+    if (message.userId !== "") {
+      obj.userId = message.userId;
+    }
+    if (message.createdAt !== undefined) {
+      obj.createdAt = message.createdAt.toISOString();
+    }
+    if (message.updatedAt !== undefined) {
+      obj.updatedAt = message.updatedAt.toISOString();
+    }
+    if (message.ownerYn !== "") {
+      obj.ownerYn = message.ownerYn;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Board>, I>>(base?: I): Board {
+    return Board.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Board>, I>>(object: I): Board {
+    const message = createBaseBoard();
+    message.id = object.id ?? 0;
+    message.title = object.title ?? "";
+    message.content = object.content ?? "";
+    message.thumbsUp = object.thumbsUp ?? 0;
+    message.thumbsDown = object.thumbsDown ?? 0;
+    message.userId = object.userId ?? "";
+    message.createdAt = object.createdAt ?? undefined;
+    message.updatedAt = object.updatedAt ?? undefined;
+    message.ownerYn = object.ownerYn ?? "";
+    return message;
+  },
+};
 
 function createBaseBoardResult(): BoardResult {
   return { resultCode: 0 };
@@ -124,28 +373,102 @@ export const BoardResult = {
   },
 };
 
-function createBaseBoardCreate(): BoardCreate {
-  return { title: "", content: "", userId: undefined };
+function createBaseBoardId(): BoardId {
+  return { id: 0, userId: "" };
 }
 
-export const BoardCreate = {
-  encode(message: BoardCreate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const BoardId = {
+  encode(message: BoardId, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).int32(message.id);
+    }
+    if (message.userId !== "") {
+      writer.uint32(18).string(message.userId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): BoardId {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseBoardId();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.id = reader.int32();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.userId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): BoardId {
+    return {
+      id: isSet(object.id) ? globalThis.Number(object.id) : 0,
+      userId: isSet(object.userId) ? globalThis.String(object.userId) : "",
+    };
+  },
+
+  toJSON(message: BoardId): unknown {
+    const obj: any = {};
+    if (message.id !== 0) {
+      obj.id = Math.round(message.id);
+    }
+    if (message.userId !== "") {
+      obj.userId = message.userId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<BoardId>, I>>(base?: I): BoardId {
+    return BoardId.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<BoardId>, I>>(object: I): BoardId {
+    const message = createBaseBoardId();
+    message.id = object.id ?? 0;
+    message.userId = object.userId ?? "";
+    return message;
+  },
+};
+
+function createBaseCreateBoardRequest(): CreateBoardRequest {
+  return { title: "", content: "", userId: "" };
+}
+
+export const CreateBoardRequest = {
+  encode(message: CreateBoardRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
     }
     if (message.content !== "") {
       writer.uint32(18).string(message.content);
     }
-    if (message.userId !== undefined) {
+    if (message.userId !== "") {
       writer.uint32(26).string(message.userId);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): BoardCreate {
+  decode(input: _m0.Reader | Uint8Array, length?: number): CreateBoardRequest {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseBoardCreate();
+    const message = createBaseCreateBoardRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -179,15 +502,15 @@ export const BoardCreate = {
     return message;
   },
 
-  fromJSON(object: any): BoardCreate {
+  fromJSON(object: any): CreateBoardRequest {
     return {
       title: isSet(object.title) ? globalThis.String(object.title) : "",
       content: isSet(object.content) ? globalThis.String(object.content) : "",
-      userId: isSet(object.userId) ? globalThis.String(object.userId) : undefined,
+      userId: isSet(object.userId) ? globalThis.String(object.userId) : "",
     };
   },
 
-  toJSON(message: BoardCreate): unknown {
+  toJSON(message: CreateBoardRequest): unknown {
     const obj: any = {};
     if (message.title !== "") {
       obj.title = message.title;
@@ -195,20 +518,650 @@ export const BoardCreate = {
     if (message.content !== "") {
       obj.content = message.content;
     }
+    if (message.userId !== "") {
+      obj.userId = message.userId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CreateBoardRequest>, I>>(base?: I): CreateBoardRequest {
+    return CreateBoardRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CreateBoardRequest>, I>>(object: I): CreateBoardRequest {
+    const message = createBaseCreateBoardRequest();
+    message.title = object.title ?? "";
+    message.content = object.content ?? "";
+    message.userId = object.userId ?? "";
+    return message;
+  },
+};
+
+function createBaseCreateBoardResponse(): CreateBoardResponse {
+  return { board: undefined };
+}
+
+export const CreateBoardResponse = {
+  encode(message: CreateBoardResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.board !== undefined) {
+      Board.encode(message.board, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CreateBoardResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCreateBoardResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.board = Board.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CreateBoardResponse {
+    return { board: isSet(object.board) ? Board.fromJSON(object.board) : undefined };
+  },
+
+  toJSON(message: CreateBoardResponse): unknown {
+    const obj: any = {};
+    if (message.board !== undefined) {
+      obj.board = Board.toJSON(message.board);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CreateBoardResponse>, I>>(base?: I): CreateBoardResponse {
+    return CreateBoardResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CreateBoardResponse>, I>>(object: I): CreateBoardResponse {
+    const message = createBaseCreateBoardResponse();
+    message.board = (object.board !== undefined && object.board !== null) ? Board.fromPartial(object.board) : undefined;
+    return message;
+  },
+};
+
+function createBaseListBoardRequest(): ListBoardRequest {
+  return { limit: undefined, page: undefined, userId: undefined };
+}
+
+export const ListBoardRequest = {
+  encode(message: ListBoardRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.limit !== undefined) {
+      writer.uint32(8).int32(message.limit);
+    }
+    if (message.page !== undefined) {
+      writer.uint32(16).int32(message.page);
+    }
+    if (message.userId !== undefined) {
+      writer.uint32(26).string(message.userId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ListBoardRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseListBoardRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.limit = reader.int32();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.page = reader.int32();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.userId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ListBoardRequest {
+    return {
+      limit: isSet(object.limit) ? globalThis.Number(object.limit) : undefined,
+      page: isSet(object.page) ? globalThis.Number(object.page) : undefined,
+      userId: isSet(object.userId) ? globalThis.String(object.userId) : undefined,
+    };
+  },
+
+  toJSON(message: ListBoardRequest): unknown {
+    const obj: any = {};
+    if (message.limit !== undefined) {
+      obj.limit = Math.round(message.limit);
+    }
+    if (message.page !== undefined) {
+      obj.page = Math.round(message.page);
+    }
     if (message.userId !== undefined) {
       obj.userId = message.userId;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<BoardCreate>, I>>(base?: I): BoardCreate {
-    return BoardCreate.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ListBoardRequest>, I>>(base?: I): ListBoardRequest {
+    return ListBoardRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<BoardCreate>, I>>(object: I): BoardCreate {
-    const message = createBaseBoardCreate();
+  fromPartial<I extends Exact<DeepPartial<ListBoardRequest>, I>>(object: I): ListBoardRequest {
+    const message = createBaseListBoardRequest();
+    message.limit = object.limit ?? undefined;
+    message.page = object.page ?? undefined;
+    message.userId = object.userId ?? undefined;
+    return message;
+  },
+};
+
+function createBaseListBoardResponse(): ListBoardResponse {
+  return { board: [] };
+}
+
+export const ListBoardResponse = {
+  encode(message: ListBoardResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.board) {
+      Board.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ListBoardResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseListBoardResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.board.push(Board.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ListBoardResponse {
+    return { board: globalThis.Array.isArray(object?.board) ? object.board.map((e: any) => Board.fromJSON(e)) : [] };
+  },
+
+  toJSON(message: ListBoardResponse): unknown {
+    const obj: any = {};
+    if (message.board?.length) {
+      obj.board = message.board.map((e) => Board.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ListBoardResponse>, I>>(base?: I): ListBoardResponse {
+    return ListBoardResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ListBoardResponse>, I>>(object: I): ListBoardResponse {
+    const message = createBaseListBoardResponse();
+    message.board = object.board?.map((e) => Board.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseGetBoardRequest(): GetBoardRequest {
+  return { id: 0, userId: undefined };
+}
+
+export const GetBoardRequest = {
+  encode(message: GetBoardRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).int32(message.id);
+    }
+    if (message.userId !== undefined) {
+      writer.uint32(18).string(message.userId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetBoardRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetBoardRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.id = reader.int32();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.userId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetBoardRequest {
+    return {
+      id: isSet(object.id) ? globalThis.Number(object.id) : 0,
+      userId: isSet(object.userId) ? globalThis.String(object.userId) : undefined,
+    };
+  },
+
+  toJSON(message: GetBoardRequest): unknown {
+    const obj: any = {};
+    if (message.id !== 0) {
+      obj.id = Math.round(message.id);
+    }
+    if (message.userId !== undefined) {
+      obj.userId = message.userId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<GetBoardRequest>, I>>(base?: I): GetBoardRequest {
+    return GetBoardRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GetBoardRequest>, I>>(object: I): GetBoardRequest {
+    const message = createBaseGetBoardRequest();
+    message.id = object.id ?? 0;
+    message.userId = object.userId ?? undefined;
+    return message;
+  },
+};
+
+function createBaseGetBoardResponse(): GetBoardResponse {
+  return { board: undefined };
+}
+
+export const GetBoardResponse = {
+  encode(message: GetBoardResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.board !== undefined) {
+      Board.encode(message.board, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetBoardResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetBoardResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.board = Board.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetBoardResponse {
+    return { board: isSet(object.board) ? Board.fromJSON(object.board) : undefined };
+  },
+
+  toJSON(message: GetBoardResponse): unknown {
+    const obj: any = {};
+    if (message.board !== undefined) {
+      obj.board = Board.toJSON(message.board);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<GetBoardResponse>, I>>(base?: I): GetBoardResponse {
+    return GetBoardResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GetBoardResponse>, I>>(object: I): GetBoardResponse {
+    const message = createBaseGetBoardResponse();
+    message.board = (object.board !== undefined && object.board !== null) ? Board.fromPartial(object.board) : undefined;
+    return message;
+  },
+};
+
+function createBaseUpdateBoardRequest(): UpdateBoardRequest {
+  return { id: 0, title: "", content: "", userId: "" };
+}
+
+export const UpdateBoardRequest = {
+  encode(message: UpdateBoardRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).int32(message.id);
+    }
+    if (message.title !== "") {
+      writer.uint32(18).string(message.title);
+    }
+    if (message.content !== "") {
+      writer.uint32(26).string(message.content);
+    }
+    if (message.userId !== "") {
+      writer.uint32(34).string(message.userId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): UpdateBoardRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseUpdateBoardRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.id = reader.int32();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.title = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.content = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.userId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): UpdateBoardRequest {
+    return {
+      id: isSet(object.id) ? globalThis.Number(object.id) : 0,
+      title: isSet(object.title) ? globalThis.String(object.title) : "",
+      content: isSet(object.content) ? globalThis.String(object.content) : "",
+      userId: isSet(object.userId) ? globalThis.String(object.userId) : "",
+    };
+  },
+
+  toJSON(message: UpdateBoardRequest): unknown {
+    const obj: any = {};
+    if (message.id !== 0) {
+      obj.id = Math.round(message.id);
+    }
+    if (message.title !== "") {
+      obj.title = message.title;
+    }
+    if (message.content !== "") {
+      obj.content = message.content;
+    }
+    if (message.userId !== "") {
+      obj.userId = message.userId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<UpdateBoardRequest>, I>>(base?: I): UpdateBoardRequest {
+    return UpdateBoardRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<UpdateBoardRequest>, I>>(object: I): UpdateBoardRequest {
+    const message = createBaseUpdateBoardRequest();
+    message.id = object.id ?? 0;
     message.title = object.title ?? "";
     message.content = object.content ?? "";
-    message.userId = object.userId ?? undefined;
+    message.userId = object.userId ?? "";
+    return message;
+  },
+};
+
+function createBaseUpdateBoardResponse(): UpdateBoardResponse {
+  return { boardResult: undefined };
+}
+
+export const UpdateBoardResponse = {
+  encode(message: UpdateBoardResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.boardResult !== undefined) {
+      BoardResult.encode(message.boardResult, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): UpdateBoardResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseUpdateBoardResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.boardResult = BoardResult.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): UpdateBoardResponse {
+    return { boardResult: isSet(object.boardResult) ? BoardResult.fromJSON(object.boardResult) : undefined };
+  },
+
+  toJSON(message: UpdateBoardResponse): unknown {
+    const obj: any = {};
+    if (message.boardResult !== undefined) {
+      obj.boardResult = BoardResult.toJSON(message.boardResult);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<UpdateBoardResponse>, I>>(base?: I): UpdateBoardResponse {
+    return UpdateBoardResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<UpdateBoardResponse>, I>>(object: I): UpdateBoardResponse {
+    const message = createBaseUpdateBoardResponse();
+    message.boardResult = (object.boardResult !== undefined && object.boardResult !== null)
+      ? BoardResult.fromPartial(object.boardResult)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseDeleteBoardRequest(): DeleteBoardRequest {
+  return { id: 0, userId: "" };
+}
+
+export const DeleteBoardRequest = {
+  encode(message: DeleteBoardRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).int32(message.id);
+    }
+    if (message.userId !== "") {
+      writer.uint32(18).string(message.userId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): DeleteBoardRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDeleteBoardRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.id = reader.int32();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.userId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): DeleteBoardRequest {
+    return {
+      id: isSet(object.id) ? globalThis.Number(object.id) : 0,
+      userId: isSet(object.userId) ? globalThis.String(object.userId) : "",
+    };
+  },
+
+  toJSON(message: DeleteBoardRequest): unknown {
+    const obj: any = {};
+    if (message.id !== 0) {
+      obj.id = Math.round(message.id);
+    }
+    if (message.userId !== "") {
+      obj.userId = message.userId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<DeleteBoardRequest>, I>>(base?: I): DeleteBoardRequest {
+    return DeleteBoardRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<DeleteBoardRequest>, I>>(object: I): DeleteBoardRequest {
+    const message = createBaseDeleteBoardRequest();
+    message.id = object.id ?? 0;
+    message.userId = object.userId ?? "";
+    return message;
+  },
+};
+
+function createBaseDeleteBoardResponse(): DeleteBoardResponse {
+  return { boardResult: undefined };
+}
+
+export const DeleteBoardResponse = {
+  encode(message: DeleteBoardResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.boardResult !== undefined) {
+      BoardResult.encode(message.boardResult, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): DeleteBoardResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDeleteBoardResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.boardResult = BoardResult.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): DeleteBoardResponse {
+    return { boardResult: isSet(object.boardResult) ? BoardResult.fromJSON(object.boardResult) : undefined };
+  },
+
+  toJSON(message: DeleteBoardResponse): unknown {
+    const obj: any = {};
+    if (message.boardResult !== undefined) {
+      obj.boardResult = BoardResult.toJSON(message.boardResult);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<DeleteBoardResponse>, I>>(base?: I): DeleteBoardResponse {
+    return DeleteBoardResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<DeleteBoardResponse>, I>>(object: I): DeleteBoardResponse {
+    const message = createBaseDeleteBoardResponse();
+    message.boardResult = (object.boardResult !== undefined && object.boardResult !== null)
+      ? BoardResult.fromPartial(object.boardResult)
+      : undefined;
     return message;
   },
 };
@@ -216,39 +1169,142 @@ export const BoardCreate = {
 /** 서비스 */
 export type BoardServiceService = typeof BoardServiceService;
 export const BoardServiceService = {
-  create: {
-    path: "/boardPackage.BoardService/create",
+  list: {
+    path: "/board.BoardService/list",
     requestStream: false,
     responseStream: false,
-    requestSerialize: (value: BoardCreate) => Buffer.from(BoardCreate.encode(value).finish()),
-    requestDeserialize: (value: Buffer) => BoardCreate.decode(value),
-    responseSerialize: (value: BoardResult) => Buffer.from(BoardResult.encode(value).finish()),
-    responseDeserialize: (value: Buffer) => BoardResult.decode(value),
+    requestSerialize: (value: ListBoardRequest) => Buffer.from(ListBoardRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => ListBoardRequest.decode(value),
+    responseSerialize: (value: ListBoardResponse) => Buffer.from(ListBoardResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => ListBoardResponse.decode(value),
+  },
+  create: {
+    path: "/board.BoardService/create",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: CreateBoardRequest) => Buffer.from(CreateBoardRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => CreateBoardRequest.decode(value),
+    responseSerialize: (value: CreateBoardResponse) => Buffer.from(CreateBoardResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => CreateBoardResponse.decode(value),
+  },
+  info: {
+    path: "/board.BoardService/info",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetBoardRequest) => Buffer.from(GetBoardRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => GetBoardRequest.decode(value),
+    responseSerialize: (value: GetBoardResponse) => Buffer.from(GetBoardResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => GetBoardResponse.decode(value),
+  },
+  update: {
+    path: "/board.BoardService/update",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: UpdateBoardRequest) => Buffer.from(UpdateBoardRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => UpdateBoardRequest.decode(value),
+    responseSerialize: (value: UpdateBoardResponse) => Buffer.from(UpdateBoardResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => UpdateBoardResponse.decode(value),
+  },
+  delete: {
+    path: "/board.BoardService/delete",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: DeleteBoardRequest) => Buffer.from(DeleteBoardRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => DeleteBoardRequest.decode(value),
+    responseSerialize: (value: DeleteBoardResponse) => Buffer.from(DeleteBoardResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => DeleteBoardResponse.decode(value),
   },
 } as const;
 
 export interface BoardServiceServer extends UntypedServiceImplementation {
-  create: handleUnaryCall<BoardCreate, BoardResult>;
+  list: handleUnaryCall<ListBoardRequest, ListBoardResponse>;
+  create: handleUnaryCall<CreateBoardRequest, CreateBoardResponse>;
+  info: handleUnaryCall<GetBoardRequest, GetBoardResponse>;
+  update: handleUnaryCall<UpdateBoardRequest, UpdateBoardResponse>;
+  delete: handleUnaryCall<DeleteBoardRequest, DeleteBoardResponse>;
 }
 
 export interface BoardServiceClient extends Client {
-  create(request: BoardCreate, callback: (error: ServiceError | null, response: BoardResult) => void): ClientUnaryCall;
-  create(
-    request: BoardCreate,
-    metadata: Metadata,
-    callback: (error: ServiceError | null, response: BoardResult) => void,
+  list(
+    request: ListBoardRequest,
+    callback: (error: ServiceError | null, response: ListBoardResponse) => void,
   ): ClientUnaryCall;
-  create(
-    request: BoardCreate,
+  list(
+    request: ListBoardRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: ListBoardResponse) => void,
+  ): ClientUnaryCall;
+  list(
+    request: ListBoardRequest,
     metadata: Metadata,
     options: Partial<CallOptions>,
-    callback: (error: ServiceError | null, response: BoardResult) => void,
+    callback: (error: ServiceError | null, response: ListBoardResponse) => void,
+  ): ClientUnaryCall;
+  create(
+    request: CreateBoardRequest,
+    callback: (error: ServiceError | null, response: CreateBoardResponse) => void,
+  ): ClientUnaryCall;
+  create(
+    request: CreateBoardRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: CreateBoardResponse) => void,
+  ): ClientUnaryCall;
+  create(
+    request: CreateBoardRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: CreateBoardResponse) => void,
+  ): ClientUnaryCall;
+  info(
+    request: GetBoardRequest,
+    callback: (error: ServiceError | null, response: GetBoardResponse) => void,
+  ): ClientUnaryCall;
+  info(
+    request: GetBoardRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: GetBoardResponse) => void,
+  ): ClientUnaryCall;
+  info(
+    request: GetBoardRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: GetBoardResponse) => void,
+  ): ClientUnaryCall;
+  update(
+    request: UpdateBoardRequest,
+    callback: (error: ServiceError | null, response: UpdateBoardResponse) => void,
+  ): ClientUnaryCall;
+  update(
+    request: UpdateBoardRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: UpdateBoardResponse) => void,
+  ): ClientUnaryCall;
+  update(
+    request: UpdateBoardRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: UpdateBoardResponse) => void,
+  ): ClientUnaryCall;
+  delete(
+    request: DeleteBoardRequest,
+    callback: (error: ServiceError | null, response: DeleteBoardResponse) => void,
+  ): ClientUnaryCall;
+  delete(
+    request: DeleteBoardRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: DeleteBoardResponse) => void,
+  ): ClientUnaryCall;
+  delete(
+    request: DeleteBoardRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: DeleteBoardResponse) => void,
   ): ClientUnaryCall;
 }
 
 export const BoardServiceClient = makeGenericClientConstructor(
   BoardServiceService,
-  "boardPackage.BoardService",
+  "board.BoardService",
 ) as unknown as {
   new (address: string, credentials: ChannelCredentials, options?: Partial<ClientOptions>): BoardServiceClient;
   service: typeof BoardServiceService;
@@ -266,6 +1322,28 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function toTimestamp(date: Date): Timestamp {
+  const seconds = Math.trunc(date.getTime() / 1_000);
+  const nanos = (date.getTime() % 1_000) * 1_000_000;
+  return { seconds, nanos };
+}
+
+function fromTimestamp(t: Timestamp): Date {
+  let millis = (t.seconds || 0) * 1_000;
+  millis += (t.nanos || 0) / 1_000_000;
+  return new globalThis.Date(millis);
+}
+
+function fromJsonTimestamp(o: any): Date {
+  if (o instanceof globalThis.Date) {
+    return o;
+  } else if (typeof o === "string") {
+    return new globalThis.Date(o);
+  } else {
+    return fromTimestamp(Timestamp.fromJSON(o));
+  }
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
