@@ -17,7 +17,7 @@ const create = async (params: createBoard): Promise<board> => {
       {
         title,
         content,
-        user_id: userId,
+        userId,
       },
       {
         plain: true,
@@ -28,7 +28,7 @@ const create = async (params: createBoard): Promise<board> => {
 
     await t.commit();
 
-    result.owner_yn = "Y";
+    result.ownerYn = "Y";
 
     return result;
   } catch (err) {

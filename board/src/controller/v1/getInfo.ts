@@ -9,7 +9,7 @@ const getInfo = async (params: iInfoReq): Promise<board | null> => {
       plain: true,
       raw: true,
     });
-    if (result) result.owner_yn = userId === result.user_id ? "Y" : "N";
+    if (result) result.ownerYn = userId === result.userId ? "Y" : "N";
 
     return result;
   } catch (err) {

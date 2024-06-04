@@ -45,13 +45,33 @@ export function getBoardServer(): BoardServiceServer {
     callback: sendUnaryData<ListBoardResponse>
   ) {
     try {
-      const boards: any = await getList(call.request);
-      // const boardsPB = boards.map(Board.fromJSON);
-      // const response: ListBoardResponse = {
-      //   boards: boardsPB,
-      // };
+      const boards = await getList(call.request);
       console.log(`boards;`, boards);
-      callback(null, boards);
+      const boardsPB = boards.map(Board.fromJSON);
+      console.log(`boardsPB;`, Board.fromJSON(boards));
+      /*
+ id: 17,
+    userId: '665d3e7b2c635958484d5e94',
+    title: '제목12345',
+    content: '내용',
+    thumbsUp: 0,
+    thumbsDown: 0,
+    createdAt: 2024-06-02T21:18:25.480Z,
+    updatedAt: 2024-06-02T21:18:25.480Z,
+    ownerYn: 'Y'
+    
+    id: 0,
+  title: '',
+  content: '',
+  thumbsUp: 0,
+  thumbsDown: 0,
+  userId: '',
+  createdAt: undefined,
+  updatedAt: undefined,
+  ownerYn: ''
+      */
+      // const response: ListBoardResponse = { boards: boardsPB };
+      callback(null, null);
     } catch (err) {
       console.error(err);
       callback({ code: status.INTERNAL }, null);

@@ -15,12 +15,12 @@ message Board {
   int32 id = 1;
   string title = 2;
   string content = 3;
-  int32 thumbs_up = 4;
-  int32 thumbs_down = 5;
-  string user_id = 6;
-  google.protobuf.Timestamp created_at = 7;  
-  google.protobuf.Timestamp updated_at = 8;  
-  string owner_yn = 9;
+  int32 thumbsUp = 4;
+  int32 thumbsDown = 5;
+  string userId = 6;
+  google.protobuf.Timestamp createdAt = 7;  
+  google.protobuf.Timestamp updatedAt = 8;  
+  string ownerYn = 9;
 }
 
 // 결과 코드

@@ -10,7 +10,7 @@ const deleteFnc = async (params: any) => {
     await board.destroy({
       where: {
         id,
-        user_id: userId,
+        userId,
       },
       transaction: t,
     });

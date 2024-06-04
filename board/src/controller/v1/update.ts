@@ -13,7 +13,7 @@ const update = async (params: any) => {
         content,
       },
       {
-        where: { id, user_id: userId },
+        where: { id, userId },
         transaction: t,
       }
     );
