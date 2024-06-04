@@ -56,7 +56,7 @@ message ListBoardRequest  {
 }
 
 message ListBoardResponse  {
-  repeated Board board = 1;
+  repeated Board boards = 1;
 }
 
 message GetBoardRequest {
@@ -65,7 +65,7 @@ message GetBoardRequest {
 }
 
 message GetBoardResponse {
-  Board board = 1;
+  Board boards = 1;
 }
 
 message UpdateBoardRequest {

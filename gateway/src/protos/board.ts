@@ -95,7 +95,7 @@ export interface ListBoardRequest {
 }
 
 export interface ListBoardResponse {
-  board: Board[];
+  boards: Board[];
 }
 
 export interface GetBoardRequest {
@@ -104,7 +104,7 @@ export interface GetBoardRequest {
 }
 
 export interface GetBoardResponse {
-  board: Board | undefined;
+  boards: Board | undefined;
 }
 
 export interface UpdateBoardRequest {
@@ -683,12 +683,12 @@ export const ListBoardRequest = {
 };
 
 function createBaseListBoardResponse(): ListBoardResponse {
-  return { board: [] };
+  return { boards: [] };
 }
 
 export const ListBoardResponse = {
   encode(message: ListBoardResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.board) {
+    for (const v of message.boards) {
       Board.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
@@ -706,7 +706,7 @@ export const ListBoardResponse = {
             break;
           }
 
-          message.board.push(Board.decode(reader, reader.uint32()));
+          message.boards.push(Board.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -718,13 +718,13 @@ export const ListBoardResponse = {
   },
 
   fromJSON(object: any): ListBoardResponse {
-    return { board: globalThis.Array.isArray(object?.board) ? object.board.map((e: any) => Board.fromJSON(e)) : [] };
+    return { boards: globalThis.Array.isArray(object?.boards) ? object.boards.map((e: any) => Board.fromJSON(e)) : [] };
   },
 
   toJSON(message: ListBoardResponse): unknown {
     const obj: any = {};
-    if (message.board?.length) {
-      obj.board = message.board.map((e) => Board.toJSON(e));
+    if (message.boards?.length) {
+      obj.boards = message.boards.map((e) => Board.toJSON(e));
     }
     return obj;
   },
@@ -734,7 +734,7 @@ export const ListBoardResponse = {
   },
   fromPartial<I extends Exact<DeepPartial<ListBoardResponse>, I>>(object: I): ListBoardResponse {
     const message = createBaseListBoardResponse();
-    message.board = object.board?.map((e) => Board.fromPartial(e)) || [];
+    message.boards = object.boards?.map((e) => Board.fromPartial(e)) || [];
     return message;
   },
 };
@@ -814,13 +814,13 @@ export const GetBoardRequest = {
 };
 
 function createBaseGetBoardResponse(): GetBoardResponse {
-  return { board: undefined };
+  return { boards: undefined };
 }
 
 export const GetBoardResponse = {
   encode(message: GetBoardResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.board !== undefined) {
-      Board.encode(message.board, writer.uint32(10).fork()).ldelim();
+    if (message.boards !== undefined) {
+      Board.encode(message.boards, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
@@ -837,7 +837,7 @@ export const GetBoardResponse = {
             break;
           }
 
-          message.board = Board.decode(reader, reader.uint32());
+          message.boards = Board.decode(reader, reader.uint32());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -849,13 +849,13 @@ export const GetBoardResponse = {
   },
 
   fromJSON(object: any): GetBoardResponse {
-    return { board: isSet(object.board) ? Board.fromJSON(object.board) : undefined };
+    return { boards: isSet(object.boards) ? Board.fromJSON(object.boards) : undefined };
   },
 
   toJSON(message: GetBoardResponse): unknown {
     const obj: any = {};
-    if (message.board !== undefined) {
-      obj.board = Board.toJSON(message.board);
+    if (message.boards !== undefined) {
+      obj.boards = Board.toJSON(message.boards);
     }
     return obj;
   },
@@ -865,7 +865,9 @@ export const GetBoardResponse = {
   },
   fromPartial<I extends Exact<DeepPartial<GetBoardResponse>, I>>(object: I): GetBoardResponse {
     const message = createBaseGetBoardResponse();
-    message.board = (object.board !== undefined && object.board !== null) ? Board.fromPartial(object.board) : undefined;
+    message.boards = (object.boards !== undefined && object.boards !== null)
+      ? Board.fromPartial(object.boards)
+      : undefined;
     return message;
   },
 };

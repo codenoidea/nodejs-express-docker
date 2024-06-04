@@ -24,7 +24,7 @@ interface boardAttributes {
   ownerYn?: string;
 }
 
-export class board extends Model<boardAttributes> {
+export class board extends Model {
   id!: number;
   title!: string;
   content!: string;

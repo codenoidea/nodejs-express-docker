@@ -5,7 +5,6 @@ const getList = async (params: iListReq): Promise<board[]> => {
     const { limit, page, userId } = params;
     const result = await board.findAll({
       limit,
-      raw: true,
     });
 
     for (const r of result) {

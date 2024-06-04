@@ -20,7 +20,7 @@ const update = async (params: any) => {
 
     await t.commit();
 
-    return 0;
+    return 1;
   } catch (err) {
     await t.rollback();
 

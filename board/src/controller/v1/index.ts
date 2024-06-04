@@ -46,32 +46,11 @@ export function getBoardServer(): BoardServiceServer {
   ) {
     try {
       const boards = await getList(call.request);
-      console.log(`boards;`, boards);
       const boardsPB = boards.map(Board.fromJSON);
-      console.log(`boardsPB;`, Board.fromJSON(boards));
-      /*
- id: 17,
-    userId: '665d3e7b2c635958484d5e94',
-    title: '제목12345',
-    content: '내용',
-    thumbsUp: 0,
-    thumbsDown: 0,
-    createdAt: 2024-06-02T21:18:25.480Z,
-    updatedAt: 2024-06-02T21:18:25.480Z,
-    ownerYn: 'Y'
-    
-    id: 0,
-  title: '',
-  content: '',
-  thumbsUp: 0,
-  thumbsDown: 0,
-  userId: '',
-  createdAt: undefined,
-  updatedAt: undefined,
-  ownerYn: ''
-      */
-      // const response: ListBoardResponse = { boards: boardsPB };
-      callback(null, null);
+
+      const response: ListBoardResponse = { boards: boardsPB };
+
+      callback(null, response);
     } catch (err) {
       console.error(err);
       callback({ code: status.INTERNAL }, null);
@@ -87,7 +66,7 @@ export function getBoardServer(): BoardServiceServer {
       if (board) {
         const boardPB = Board.fromJSON(board);
         const response: GetBoardResponse = {
-          board: boardPB,
+          boards: boardPB,
         };
         callback(null, response);
       } else {
@@ -109,18 +88,28 @@ export function getBoardServer(): BoardServiceServer {
     call: ServerUnaryCall<UpdateBoardRequest, UpdateBoardResponse>,
     callback: sendUnaryData<UpdateBoardResponse>
   ) {
-    const result = await updateFnc(call.request);
-
-    callback({ code: status.UNIMPLEMENTED }, null);
+    try {
+      const board = await updateFnc(call.request);
+      const result = UpdateBoardResponse.fromJSON({ boardResult: board });
+      callback(null, result);
+    } catch (err) {
+      callback({ code: status.INTERNAL }, null);
+      console.error(err);
+    }
   }
 
   async function deleteF(
     call: ServerUnaryCall<DeleteBoardRequest, DeleteBoardResponse>,
     callback: sendUnaryData<DeleteBoardResponse>
   ) {
-    const result = await deleteFnc(call.request);
-
-    callback({ code: status.UNIMPLEMENTED }, null);
+    try {
+      const board = await deleteFnc(call.request);
+      const result = DeleteBoardResponse.fromJSON({ boardResult: board });
+      callback(null, result);
+    } catch (err) {
+      callback({ code: status.INTERNAL }, null);
+      console.error(err);
+    }
   }
 
   return { create, list, info, update, delete: deleteF };
