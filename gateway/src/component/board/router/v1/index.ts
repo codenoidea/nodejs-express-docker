@@ -33,24 +33,10 @@ router.get(
         page: Number(req.query.page) || 1,
         userId: req.user?.userId,
       };
-      console.log(`params;`, params);
-      // client.list(
-      //   params,
-      //   (err: ServiceError | null, response: ListBoardResponse) => {
-      //     if (err) {
-      //       console.log(err);
-      //     }
-      //     console.log(JSON.stringify(response));
-
-      //     res.json(response);
-      //   }
-      // );
 
       client.list(params, (err, resp) => {
         if (err) {
           console.error(err);
-        } else {
-          console.log("Response :", resp);
         }
         res.json(resp);
       });
@@ -75,8 +61,6 @@ router.post(
       client.create(params, (err, resp) => {
         if (err) {
           console.error(err);
-        } else {
-          console.log("Response :", resp);
         }
         res.json(resp);
       });
@@ -103,7 +87,6 @@ router.put(
           if (err) {
             console.log(err);
           }
-          console.log(JSON.stringify(response));
 
           res.json(response);
         }
@@ -129,7 +112,6 @@ router.delete(
           if (err) {
             console.log(err);
           }
-          console.log(JSON.stringify(response));
 
           res.json(response);
         }
@@ -152,8 +134,6 @@ router.get(
       client.info(params, (err, resp) => {
         if (err) {
           console.error(err);
-        } else {
-          console.log("Response :", resp);
         }
         res.json(resp);
       });
