@@ -20,10 +20,8 @@
     "morgan": "~1.9.1",
     "pg": "^8.11.5",
     "pg-hstore": "^2.3.4",
-    "reflect-metadata": "^0.2.2",
     "sequelize": "^6.37.3",
-    "sequelize-typescript": "^2.1.6",
-    "typeorm": "^0.3.20"
+    "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.7",

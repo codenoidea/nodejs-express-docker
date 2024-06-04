@@ -79,6 +79,6 @@ board.init(
     tableName: "board",
     freezeTableName: true, // 테이블명 변경 불가
     timestamps: false, // create_at, updated_at 컬럼 생성
-    underscored: false, // 위 세 가지 타임스탬프의 컬럼명 표기법 설정, true로 하면 snake case / false면 camel case
+    underscored: true, // 위 세 가지 타임스탬프의 컬럼명 표기법 설정, true로 하면 snake case / false면 camel case
   }
 );
